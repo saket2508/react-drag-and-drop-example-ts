@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import User from '../types/User'
-import { Card } from 'reactstrap'
 import BoardViewLayout from './components/BoardView'
 
 const App = () => {
   const [ usersData, setUsersData ] = useState<User[] | null>(null);
+
+  const modifyLists = (users: User[]) => {
+    setUsersData(users);
+  }
 
   const getData = () => {
     axios.get('https://jsonplaceholder.typicode.com/todos')
@@ -31,7 +34,7 @@ const App = () => {
     <div className='container'>
       <h3 className='text-center mt-4'>Board View Component</h3>
       <div className='container mt-4 pb-4'>
-        <BoardViewLayout data={usersData!}/>
+        <BoardViewLayout lists={usersData!} modifyLists={modifyLists}/>
       </div>
     </div>
   );

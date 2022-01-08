@@ -1,4 +1,3 @@
-import { Card } from 'reactstrap';
 import Task from '../../types/Task';
 import User from '../../types/User';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -7,13 +6,13 @@ const TaskCard = (props: {task: Task, id: number}) => {
     const { task, id } = props;
     return(
         <Draggable draggableId={task.id.toString()} index={id}>
-            {provided => (
-                <Card 
+            {(provided, snapshot) => (
+                <div 
                     key={id} 
-                    className='p-1'
+                    className='card p-1'
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    innerRef={provided.innerRef}
+                    ref={provided.innerRef}
                 >
                     {task.title}
                     <div className='d-flex justify-content-between'>
@@ -23,7 +22,8 @@ const TaskCard = (props: {task: Task, id: number}) => {
                                 : <small className='text-warning'>Pending</small>
                             }
                     </div>
-                </Card>
+                    
+                </div>
             )}
         </Draggable>
     )
@@ -50,9 +50,10 @@ const Column = (props: { user: User }) => {
                 >
                     {props.user.tasks.map((task: Task, id: number) => {
                         return (
-                            <TaskCard task={task} id={id}/>
+                            <TaskCard task={task} id={id} key={id}/>
                         )
                     })}
+                    {provided.placeholder}
                 </div>
             )}
         </Droppable>
@@ -61,13 +62,39 @@ const Column = (props: { user: User }) => {
 }
 
 
-const BoardViewLayout = (props: {data: User[]}) => {
-    const handleDragEnd = () => {}
-    const { data } = props;
+const BoardViewLayout = (props: {lists: User[], modifyLists: (users: User[]) => void}) => {
+    const { lists, modifyLists } = props;
+
+    const handleDragEnd = (res: any) => {
+        const { source, destination } = res;
+        if(!destination){
+            return
+        }
+        let _lists = [...lists];
+        let sourceUserIdx = parseInt(source.droppableId) - 1;
+        let sourceItemIdx = source.index;
+
+        let destUserIdx = parseInt(destination.droppableId) - 1;
+        let destIdx = destination.index;
+
+        if(sourceUserIdx === destUserIdx){
+            // items are in the same column and need to be swapped
+            let sourceItem = _lists[sourceUserIdx].tasks[sourceItemIdx];
+            _lists[sourceUserIdx].tasks[sourceItemIdx] = _lists[sourceUserIdx].tasks[destIdx];
+            _lists[sourceUserIdx].tasks[destIdx] = sourceItem
+        } else {
+            // items are in different columns so the source needs to be inserted into the destination list at the given position
+            let sourceItem = _lists[sourceUserIdx].tasks[sourceItemIdx];
+            _lists[destUserIdx].tasks = [..._lists[destUserIdx].tasks.slice(0, destIdx), sourceItem, ..._lists[destUserIdx].tasks.slice(destIdx)]
+            _lists[sourceUserIdx].tasks = [..._lists[sourceUserIdx].tasks.slice(0, sourceItemIdx), ..._lists[sourceUserIdx].tasks.slice(sourceItemIdx+1)];
+        }
+        modifyLists(_lists);
+    }
+
     return(
         <div className='d-flex flex-column flex-md-row gap-3'>
             <DragDropContext onDragEnd={handleDragEnd}>
-                {data?.map((user: User, id: number ) => {
+                {lists?.map((user: User, id: number ) => {
                     return(
                         <Column key={id} user={user}/>
                     )
