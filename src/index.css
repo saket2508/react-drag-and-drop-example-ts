@@ -1,3 +1,7 @@
+*{
+  margin: 0;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +14,70 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.AppContainer{
+  padding: 1rem 1.5rem;
+  max-width: 100%;
+}
+
+.MainContainer{
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.ParaContainer{
+  margin-top: 1.2rem;
+}
+
+.HeadingLarge{
+  text-align: center;
+  font-weight: 600;
+  line-height: 1.2;
+  font-size: 1.6rem;
+  margin-top: 1rem;
+}
+
+.BodyText{
+  color: #52525B;
+  text-align: center;
+}
+
+.CardGrid{
+  display: grid;
+  max-width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 1.5rem 0.2rem;
+}
+
+.CardHeading{
+  color: black;
+  font-weight: 500;
+}
+
+.CardList{
+  text-align: center;
+  color: #52525B;
+  list-style-type: none;
+  margin: 0rem 0rem;
+  padding: 0;
+}
+
+.CardWrapper{
+  overflow: hidden;
+  padding: 0.7rem;
+  max-width: 300px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05), 0 0px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  margin: 0.4rem;
+}
+
+.thumbnailPic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
