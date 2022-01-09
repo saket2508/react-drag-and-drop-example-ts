@@ -4,10 +4,10 @@ import User from '../types/User'
 import BoardViewLayout from './components/BoardView'
 
 const App = () => {
-  const [ usersData, setUsersData ] = useState<User[] | null>(null);
+  const [ usersData, setUsersData ] = useState<User[] | null>(null)
 
   const modifyLists = (users: User[]) => {
-    setUsersData(users);
+    setUsersData(users)
   }
 
   const getData = () => {
@@ -22,7 +22,7 @@ const App = () => {
             {name: 'Jake', tasks: jake, img:'/images/jake.png', id: '2'},
             {name: 'Princess Bubblegum', tasks: bubblegun, img:'/images/bubblegum.png', id: '3'},
         ])
-      })
+      }).catch(err => console.error(err))
   }
 
   useEffect(() => {
@@ -32,7 +32,6 @@ const App = () => {
 
   return (
     <div className='container'>
-      <h3 className='text-center mt-4'>Board View Component</h3>
       <div className='container mt-4 pb-4'>
         <BoardViewLayout lists={usersData!} modifyLists={modifyLists}/>
       </div>
