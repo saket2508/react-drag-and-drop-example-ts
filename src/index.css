@@ -22,3 +22,7 @@ code {
   height: 30px;
   border-radius: 50%;
 }
+
+.fw-semibold {
+  font-weight: 600;
+}

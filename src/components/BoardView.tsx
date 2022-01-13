@@ -1,14 +1,19 @@
-import Task from '../../types/Task';
-import User from '../../types/User';
+import Task from '../types/Task';
+import User from '../types/User';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { FC } from 'react';
 
-const TaskCard = (props: {task: Task, id: number}) => {
+type TaskCardProps = {  
+    task: Task;
+    id: number;
+}
+
+const TaskCard: FC<TaskCardProps> = (props) => {
     const { task, id } = props;
     return(
-        <Draggable draggableId={task.id.toString()} index={id}>
+        <Draggable draggableId={task.id} index={id}>
             {(provided, snapshot) => (
                 <div 
-                    key={id} 
                     className='card p-1'
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
@@ -29,17 +34,20 @@ const TaskCard = (props: {task: Task, id: number}) => {
     )
 }
 
-const Column = (props: { user: User }) => {
+type ColumnProps = {
+    user: User;
+}
+
+const Column: FC<ColumnProps> = (props) => {
     const { user } = props;
     return (
     <div
-        key={user.id} 
         className='col p-2 h-100' 
         style={{ backgroundColor: '#E5E5E5' }}
         >   
         <div className='d-flex align-items-center gap-2'>
-            <img className='thumbnailPic' src={user.img}/>
-            <h6 className='fw-bold'>{user.name}</h6>
+            <img className='thumbnailPic' src={user.img} alt={user.name}/>
+            <h6 className='fw-semibold'>{user.name}</h6>
         </div>
         <Droppable droppableId={user.id}>
             {provided => (
@@ -61,8 +69,12 @@ const Column = (props: { user: User }) => {
     )
 }
 
+type BoardViewLayoutProps = {
+    lists: User[];
+    modifyLists: (users: User[]) => void;
+}
 
-const BoardViewLayout = (props: {lists: User[], modifyLists: (users: User[]) => void}) => {
+const BoardViewLayout: FC<BoardViewLayoutProps> = (props) => {
     const { lists, modifyLists } = props;
 
     const handleDragEnd = (res: any) => {
@@ -94,7 +106,7 @@ const BoardViewLayout = (props: {lists: User[], modifyLists: (users: User[]) => 
     return(
         <div className='d-flex flex-column flex-md-row gap-3'>
             <DragDropContext onDragEnd={handleDragEnd}>
-                {lists?.map((user: User, id: number ) => {
+                {lists.map((user: User, id: number ) => {
                     return(
                         <Column key={id} user={user}/>
                     )
