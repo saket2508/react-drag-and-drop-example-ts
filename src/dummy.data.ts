@@ -1,5 +1,3 @@
-import User from "./types/User"
-
 export const people: User[] = [{
     id: '1',
     name:'Jake',

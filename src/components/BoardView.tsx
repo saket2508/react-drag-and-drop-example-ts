@@ -1,44 +1,34 @@
-import Task from '../types/Task';
-import User from '../types/User';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { FC } from 'react';
+import { CardUI } from './CardUI';
 
-type TaskCardProps = {  
+type CardLayoutProps = {  
     task: Task;
     id: number;
+    colId: string;
 }
 
-const TaskCard: FC<TaskCardProps> = (props) => {
-    const { task, id } = props;
+const CardLayout: FC<CardLayoutProps> = (props) => {
+    const { task, colId, id } = props;
     return(
         <Draggable draggableId={task.id} index={id}>
             {(provided, snapshot) => (
-                <div 
-                    className='card p-1'
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                >
-                    {task.title}
-                    <div className='d-flex justify-content-between'>
-                        <small className='text-muted'>id: {task.id}</small>
-                            {task.completed 
-                                ? <small className='text-success'>Completed</small>
-                                : <small className='text-warning'>Pending</small>
-                            }
-                    </div>
-                    
-                </div>
+                <CardUI 
+                    provided={provided} 
+                    snapshot={snapshot} 
+                    colId={colId} 
+                    task={task}
+                />
             )}
         </Draggable>
     )
 }
 
-type ColumnProps = {
+type ColumnLayoutProps = {
     user: User;
 }
 
-const Column: FC<ColumnProps> = (props) => {
+const ColumnLayout: FC<ColumnLayoutProps> = (props) => {
     const { user } = props;
     return (
     <div
@@ -58,7 +48,7 @@ const Column: FC<ColumnProps> = (props) => {
                 >
                     {props.user.tasks.map((task: Task, id: number) => {
                         return (
-                            <TaskCard task={task} id={id} key={id}/>
+                            <CardLayout task={task} id={id} key={id} colId={user.id}/>
                         )
                     })}
                     {provided.placeholder}
@@ -77,7 +67,7 @@ type BoardViewLayoutProps = {
 const BoardViewLayout: FC<BoardViewLayoutProps> = (props) => {
     const { lists, modifyLists } = props;
 
-    const handleDragEnd = (res: any) => {
+    const handleDragEnd = (res: DropResult) => {
         const { source, destination } = res;
         if(!destination){
             return
@@ -108,7 +98,7 @@ const BoardViewLayout: FC<BoardViewLayoutProps> = (props) => {
             <DragDropContext onDragEnd={handleDragEnd}>
                 {lists.map((user: User, id: number ) => {
                     return(
-                        <Column key={id} user={user}/>
+                        <ColumnLayout key={id} user={user}/>
                     )
                 })}
             </DragDropContext>

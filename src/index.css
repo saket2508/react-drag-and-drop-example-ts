@@ -17,6 +17,26 @@ code {
     monospace;
 }
 
+.blueBg {
+  background-color: #E0F2FE;
+  border: 1px solid #38BDF8;
+}
+
+.yellowBg {
+  background-color: #FEF9C3;
+  border: 1px solid #FDE047;
+}
+
+.purpleBg {
+  background-color: #EDE9FE;
+  border: 1px solid #A78BFA;
+}
+
+.greenBg {
+  background-color:#DCFCE7;
+  border: 1px solid #4ADE80;
+}
+
 .thumbnailPic {
   width: 30px;
   height: 30px;

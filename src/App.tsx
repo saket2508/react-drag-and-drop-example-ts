@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import User from './types/User'
 import BoardViewLayout from './components/BoardView'
 import { people } from './dummy.data'
 
