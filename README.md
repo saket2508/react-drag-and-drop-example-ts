@@ -4,7 +4,4 @@
 
 - Cards can dragged, droppped and reordered across lists.
 
-- This example is similar to the playground one shown in the library's documentation.
-
-
-![Drag and Drop Example](https://media.giphy.com/media/tz8qzNnnv6lPTyfz4y/giphy.gif)
+- This example is similar to the playground one shown in the library's [documentation](https://github.com/atlassian/react-beautiful-dnd).
