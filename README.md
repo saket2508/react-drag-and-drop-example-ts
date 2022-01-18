@@ -5,3 +5,9 @@
 - Cards can reordered, dropped and dragged between lists.
 
 - The UI designed here is similar to the storybook example shown in the library's [documentation](https://github.com/atlassian/react-beautiful-dnd).
+
+&nbsp;
+
+<p align="center">
+    <img src="https://media.giphy.com/media/tz8qzNnnv6lPTyfz4y/giphy.gif"/>
+</p>
