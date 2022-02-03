@@ -4,7 +4,7 @@ import { FC } from 'react';
 type CardUIProps = {
     provided: DraggableProvided;
     snapshot: DraggableStateSnapshot;
-    colId: string;
+    colId: number;
     task: Task;
 }
 
@@ -30,7 +30,7 @@ export const CardUI: FC<CardUIProps> = (props) => {
         )
     }
     switch(colId){
-        case '1':
+        case 0:
             return(
                 <div 
                     className='card p-1 blueBg'
@@ -48,7 +48,7 @@ export const CardUI: FC<CardUIProps> = (props) => {
                     </div>
                 </div>
             )
-        case '2':
+        case 1:
             return(
                 <div 
                     className='card p-1 yellowBg'
@@ -66,7 +66,7 @@ export const CardUI: FC<CardUIProps> = (props) => {
                     </div>
                 </div>
             )
-        case '3':
+        case 2:
             return(
                 <div 
                     className='card p-1 purpleBg'
@@ -84,7 +84,7 @@ export const CardUI: FC<CardUIProps> = (props) => {
                     </div>
                 </div>
             )
-        case '4':
+        case 3:
             return(
                 <div 
                     className='card p-1 greenBg'

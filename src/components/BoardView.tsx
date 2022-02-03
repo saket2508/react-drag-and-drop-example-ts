@@ -1,17 +1,17 @@
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { FC } from 'react';
 import { CardUI } from './CardUI';
+import { avatars } from '../dummy.data'
 
 type CardLayoutProps = {  
     task: Task;
-    id: number;
-    colId: string;
+    index: number;
+    colId: number;
 }
 
-const CardLayout: FC<CardLayoutProps> = (props) => {
-    const { task, colId, id } = props;
+const CardLayout: FC<CardLayoutProps> = ({ task, colId, index }) => {
     return(
-        <Draggable draggableId={task.id} index={id}>
+        <Draggable draggableId={task.id} index={index}>
             {(provided, snapshot) => (
                 <CardUI 
                     provided={provided} 
@@ -25,30 +25,36 @@ const CardLayout: FC<CardLayoutProps> = (props) => {
 }
 
 type ColumnLayoutProps = {
-    user: User;
+    colId: number;
+    user: string;
+    tasks: Task[]
 }
 
-const ColumnLayout: FC<ColumnLayoutProps> = (props) => {
-    const { user } = props;
+const ColumnLayout: FC<ColumnLayoutProps> = ({ colId, user, tasks }) => {
     return (
     <div
         className='col p-2 h-100' 
         style={{ backgroundColor: '#E5E5E5' }}
         >   
         <div className='d-flex align-items-center gap-2'>
-            <img className='thumbnailPic' src={user.img} alt={user.name}/>
-            <h6 className='fw-semibold'>{user.name}</h6>
+            <img className='thumbnailPic' src={avatars[user]} alt={user}/>
+            <h6 className='fw-semibold'>{user}</h6>
         </div>
-        <Droppable droppableId={user.id}>
+        <Droppable droppableId={user}>
             {provided => (
                 <div 
                     className='d-flex flex-column gap-1 pt-2 pb-2'
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                 >
-                    {props.user.tasks.map((task: Task, id: number) => {
+                    {tasks.map((task: Task, idx: number) => {
                         return (
-                            <CardLayout task={task} id={id} key={id} colId={user.id}/>
+                            <CardLayout 
+                                task={task}
+                                index={idx} 
+                                key={idx} 
+                                colId={colId}
+                            />
                         )
                     })}
                     {provided.placeholder}
@@ -60,8 +66,8 @@ const ColumnLayout: FC<ColumnLayoutProps> = (props) => {
 }
 
 type BoardViewLayoutProps = {
-    lists: User[];
-    modifyLists: (users: User[]) => void;
+    lists: Users;
+    modifyLists: (users: Users) => void;
 }
 
 const BoardViewLayout: FC<BoardViewLayoutProps> = (props) => {
@@ -72,23 +78,30 @@ const BoardViewLayout: FC<BoardViewLayoutProps> = (props) => {
         if(!destination){
             return
         }
-        let _lists = [...lists];
-        let sourceUserIdx = parseInt(source.droppableId) - 1;
-        let sourceItemIdx = source.index;
+        let _lists = {...lists};
+        let sourceUser = source.droppableId;
+        let sourceIdx = source.index;
 
-        let destUserIdx = parseInt(destination.droppableId) - 1;
+        let destUser = destination.droppableId;
         let destIdx = destination.index;
 
-        if(sourceUserIdx === destUserIdx){
+        if(sourceUser === destUser){
             // items are in the same column and need to be swapped
-            let sourceItem = _lists[sourceUserIdx].tasks[sourceItemIdx];
-            _lists[sourceUserIdx].tasks[sourceItemIdx] = _lists[sourceUserIdx].tasks[destIdx];
-            _lists[sourceUserIdx].tasks[destIdx] = sourceItem
+            let sourceItem = _lists[sourceUser][sourceIdx];
+            _lists[sourceUser][sourceIdx] = _lists[sourceUser][destIdx];
+            _lists[sourceUser][destIdx] = sourceItem
         } else {
             // items are in different columns so the source needs to be inserted into the destination list at the given position
-            let sourceItem = _lists[sourceUserIdx].tasks[sourceItemIdx];
-            _lists[destUserIdx].tasks = [..._lists[destUserIdx].tasks.slice(0, destIdx), sourceItem, ..._lists[destUserIdx].tasks.slice(destIdx)]
-            _lists[sourceUserIdx].tasks = [..._lists[sourceUserIdx].tasks.slice(0, sourceItemIdx), ..._lists[sourceUserIdx].tasks.slice(sourceItemIdx+1)];
+            let sourceItem = _lists[sourceUser][sourceIdx];
+            _lists[destUser] = [
+                ..._lists[destUser].slice(0, destIdx), 
+                sourceItem, 
+                ..._lists[destUser].slice(destIdx)
+            ]
+            _lists[sourceUser] = [
+                ..._lists[sourceUser].slice(0, sourceIdx), 
+                ..._lists[sourceUser].slice(sourceIdx+1)
+            ];
         }
         modifyLists(_lists);
     }
@@ -96,9 +109,14 @@ const BoardViewLayout: FC<BoardViewLayoutProps> = (props) => {
     return(
         <div className='d-flex flex-column flex-md-row gap-3'>
             <DragDropContext onDragEnd={handleDragEnd}>
-                {lists.map((user: User, id: number ) => {
-                    return(
-                        <ColumnLayout key={id} user={user}/>
+                {Object.keys(lists).map((name: string, idx: number) => {
+                    return (
+                        <ColumnLayout
+                            key={name}
+                            user={name}
+                            tasks={lists[name]}
+                            colId={idx}
+                        />
                     )
                 })}
             </DragDropContext>

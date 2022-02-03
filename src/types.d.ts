@@ -4,10 +4,6 @@ declare type Task = {
     completed: boolean;
 }
 
-declare type User = {
-    id: string;
-    name: string;
-    img: string;
-    tasks: Task[];
+declare type Users = {
+    [name: string]: Task[]
 }
-

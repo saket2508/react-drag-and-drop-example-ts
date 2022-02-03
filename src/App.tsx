@@ -3,9 +3,9 @@ import BoardViewLayout from './components/BoardView'
 import { people } from './dummy.data'
 
 const App = () => {
-  const [ usersData, setUsersData ] = useState<User[]>(people);
+  const [ usersData, setUsersData ] = useState<Users>(people);
 
-  const modifyLists = (users: User[]) => {
+  const modifyLists = (users: Users) => {
     setUsersData(users)
   }
 
