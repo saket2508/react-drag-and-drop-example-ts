@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import BoardViewLayout from './components/BoardView'
+import Grid from './Grid'
 import { people } from './dummy.data'
 
 const App = () => {
@@ -12,7 +12,7 @@ const App = () => {
   return (
     <div className='container'>
       <div className='container mt-3 mb-2'>
-        <BoardViewLayout 
+        <Grid 
           lists={usersData} 
           modifyLists={modifyLists}
         />
